@@ -1,0 +1,31 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/opt/ros/noetic/include/**",
+        "/home/kero/catkin_ws/devel/include/**",
+        "/home/kero/catkin_build/devel/include/**",
+        "/home/kero/catkin_ws/src/beginner_tutorials/include/**",
+        "/home/kero/catkin_ws/src/VINS-Mono/camera_model/include/**",
+        "/home/kero/catkin_ws/src/VINS-Fusion/camera_models/include/**",
+        "/home/kero/catkin_ws/src/imu_tool/imu_complementary_filter/include/**",
+        "/home/kero/catkin_ws/src/imu_tool/imu_filter_madgwick/include/**",
+        "/home/kero/catkin_build/src/orb_slam3_ros_wrapper/include/**",
+        "/home/kero/catkin_ws/src/robot_localization/include/**",
+        "/home/kero/catkin_ws/src/serial/include/**",
+        "/home/kero/catkin_ws/src/test_pkg/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
