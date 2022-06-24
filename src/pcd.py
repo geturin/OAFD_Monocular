@@ -57,6 +57,11 @@ depth_transform = depth_to_pcd(10)
 while not rospy.is_shutdown():
     pcd = depth_transform.get_pcd(depth=10*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
     pcd = pcd_filter(pcd)
+    #栅格化（test）
+    pcd =(100*pcd).astype(int)
+    pcd = (pcd.astype(float)/100)
+    pcd = np.unique(pcd,axis=0)
+
     publisher.read_pcd(pcd)
     publisher.pub(frame_id="map")
 
