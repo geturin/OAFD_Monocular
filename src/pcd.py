@@ -21,11 +21,11 @@ class pointcloud_pub(object):
     def read_pcd(self,pcd) -> str:
         self.pcd = pcd
 
-    def pub(self,frame_id) -> str:
+    def pub(self,frame_id,topic_name) -> str:
         self.header = Header()
         self.header.frame_id = frame_id
         self.pcldata = pcd2.create_cloud_xyz32(self.header, self.pcd)
-        rospy.Publisher('/pointcloud_pub', PointCloud2, queue_size=1).publish(self.pcldata)
+        rospy.Publisher(topic_name, PointCloud2, queue_size=1).publish(self.pcldata)
 
 
 
@@ -48,22 +48,30 @@ def pcd_filter(pcd):
 
 
 publisher = pointcloud_pub()
+orb_pub = pointcloud_pub()
 
 frame =0
-rate = rospy.Rate(20)
-
-depth_transform = depth_to_pcd(10)
+rate = rospy.Rate(1)
+mesh_scal=10
+depth_transform = depth_to_pcd(5)
 
 while not rospy.is_shutdown():
-    pcd = depth_transform.get_pcd(depth=10*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
-    pcd = pcd_filter(pcd)
+    pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
+    #pcd = pcd_filter(pcd)
     #栅格化（test）
-    pcd =(100*pcd).astype(int)
-    pcd = (pcd.astype(float)/100)
+    pcd =(mesh_scal*pcd).astype(int)
+    pcd = (pcd.astype(float)/mesh_scal)
     pcd = np.unique(pcd,axis=0)
 
+    pcd = pcd_filter(pcd)
+
+    orb_pcd = np.load("/home/kero/catkin_ws/src/kitti/data/orb_pcd.npy")
+
     publisher.read_pcd(pcd)
-    publisher.pub(frame_id="map")
+    publisher.pub(frame_id="map",topic_name='/pointcloud_pub')
+
+    orb_pub.read_pcd(orb_pcd)
+    orb_pub.pub(frame_id="map",topic_name='/orb_pcd')
 
     
     rate.sleep() 
