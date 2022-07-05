@@ -1,7 +1,6 @@
 #Inexact differential PD control
 
 
-
 class PD(object):
 
     def __init__(self,P,D,scal):
@@ -44,6 +43,7 @@ class idPD(object):
 if __name__ == "__main__":
 
     a = idPD(P=10,D=4,scal=1,alpha=0.15)
+    b = PD(P=10, D=4, scal=1)
     while True:
-        error = int(input())
-        print(a.ctrl(error))
+        error = float(input())
+        print(a.ctrl(error),b.ctrl(error))

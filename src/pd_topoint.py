@@ -7,6 +7,7 @@ from geometry_msgs.msg import PoseWithCovarianceStamped,PoseStamped
 import tf2_geometry_msgs
 import tf2_ros
 import math
+from idPD import *
 
 
 
@@ -24,9 +25,10 @@ tf2_ros.TransformListener(tf_buffer)
 rate = rospy.Rate(20)
 
 
-x=0
-y=0
-z=0
+x=PD(P=50, D=200, scal=1)
+y=PD(P=50, D=200, scal=1)
+z=PD(P=20, D=200, scal=1)
+yaw=PD(P=0.8, D=15, scal=1)
 X=0
 Y=0
 Z=0
@@ -104,33 +106,26 @@ while not rospy.is_shutdown():
         #tello.registerCallback(tellopoint)
 
         if wait_point ==1:
-            x,y,z,yaw=getPoint()
+            erro_x,erro_y,erro_z,erro_yaw=getPoint()
 
 
-            b=50*x + 200*(x-errox)
-            errox=x
-
-            a=50*y + 200*(y-erroy)
-            erroy=y
-
-            c = 20 * z + 200 * (z - erroz)
-            erroz = z
-
-            d=0.8*yaw + 15*(yaw-erroyaw)
-            erroyaw=yaw
+            sp_x =x.ctrl(error_x)
+            sp_y = y.ctrl(error_y)
+            sp_z = z.ctrl(error_z)
+            sp_yaw = yaw.ctrl(error_yaw)
 
             #set speed max and min
-            a = round(np.clip(a,-35,35))
-            b = round(np.clip(b, -35, 35))
-            c = round(np.clip(c, -35, 35))
-            d = round(np.clip(d, -20, 20))
+            sp_x = round(np.clip(a,-35,35))
+            sp_y = round(np.clip(b, -35, 35))
+            sp_z = round(np.clip(c, -35, 35))
+            sp_yaw = round(np.clip(d, -20, 20))
 
 
             msg = 'rc {} {} {} {}'.format(
-                    -1*a,
-                    b,
+                    -1*sp_x,
+                    sp_y,
                     0,
-                    -1*d
+                    -1*sp_yaw
             )
             ctrl.publish(msg)
 

@@ -11,10 +11,6 @@ import time
 img_pub = rospy.Publisher("/camera/image_raw0", Image, queue_size=10)
 
 def publish_image(imgdata,img_pub):
-    data=CvBridge.imgmsg_to_cv2(imgdata)
-    data=cv2.resize(data,(300,240))
-    data=CvBridge().cv2_to_imgmsg(imgdata,"bgr8")
-
     img =imgdata
     img.header.stamp=rospy.Time.now()
 
@@ -22,8 +18,8 @@ def publish_image(imgdata,img_pub):
 
 
 def callback(data):
-   # imgdata=CvBridge().imgmsg_to_cv2(data)
-    img_pub = rospy.Publisher("/camera/resize", Image, queue_size=1)
+    #imgdata=CvBridge().imgmsg_to_cv2(data)
+    img_pub = rospy.Publisher("/camera/image_raw", Image, queue_size=1)
     
     publish_image(data, img_pub)
    # imgdata=CvBridge().imgmsg_to_cv2(imgdata,"rgb8")
