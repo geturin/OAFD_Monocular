@@ -29,7 +29,7 @@ cam_pub =rospy.Publisher('/camera/image_raw',Image,queue_size=1)
 rate = rospy.Rate(20)
 bridge=CvBridge()
 
-count=0
+count=1
 def callback(data):
     me.send_command_without_return(data.data)
 
