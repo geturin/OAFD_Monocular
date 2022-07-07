@@ -27,10 +27,10 @@ tf2_ros.TransformListener(tf_buffer)
 rate = rospy.Rate(20)
 
 
-x=PD(P=50, D=200, scal=1)
-y=PD(P=50, D=200, scal=1)
-z=PD(P=20, D=200, scal=1)
-yaw=PD(P=0.8, D=15, scal=1)
+x=PD(P=50, D=15, scal=1)
+y=PD(P=50, D=15, scal=1)
+z=PD(P=20, D=15, scal=1)
+yaw=PD(P=0.8, D=0.3, scal=1)
 
 errox=0
 erroy=0
