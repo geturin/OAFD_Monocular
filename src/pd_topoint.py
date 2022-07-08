@@ -116,8 +116,8 @@ while not rospy.is_shutdown():
 
 
             msg = 'rc {} {} {} {}'.format(
-                    -1*sp_x,
-                    sp_y,
+                    -1*sp_y,
+                    sp_x,
                     0,
                     -1*sp_yaw
             )
