@@ -1,13 +1,14 @@
 #!/usr/bin/python3.8
 import rospy
 import numpy as np
-from std_msgs.msg import String
+from std_msgs.msg import String,Float32
 import message_filters
 from geometry_msgs.msg import PoseWithCovarianceStamped,PoseStamped,Pose
 import tf2_geometry_msgs
 import tf2_ros
 import math
 from idPD import *
+from simple_tf import *
 
 
 
@@ -26,56 +27,24 @@ tf2_ros.TransformListener(tf_buffer)
 
 rate = rospy.Rate(20)
 
-
-x=PD(P=50, D=15, scal=1)
-y=PD(P=50, D=15, scal=1)
-z=PD(P=20, D=15, scal=1)
-yaw=PD(P=0.8, D=0.3, scal=1)
-
-errox=0
-erroy=0
-erroz=0
-wait_point=0
-erroyaw=0
-
-
+alpha = 0
+# world frame origin
+origin = PoseStamped()
+origin.pose.position.x = 0
+origin.pose.position.y = 0
+origin.pose.position.z = 0
 
 def callback(data):
-        #global x, y, z
-        #tfpose=transform_pose(map_tf_tello,data.pose)
-        #point=tfpose.pose.position
-        #x=point.x
-        #y=point.y
-        #z=point.z
-        global map_pose,wait_point
-        map_pose=data
-        wait_point=1
+    global map_pose,wait_point
+    map_pose=data
+    wait_point=1
 
-
-def get_transformation(source_frame, target_frame,
-                       tf_cache_duration=2.0):
-
-
-    # get the tf at first available time
-    try:
-        transformation = tf_buffer.lookup_transform(target_frame,
-                source_frame, rospy.Time(0), rospy.Duration(2))
-    except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
-            tf2_ros.ExtrapolationException):
-        rospy.logerr('Unable to find the transformation from %s to %s'
-                     % source_frame, target_frame)
-    return transformation
-
-def transform_pose(transformation, pose):
-    tfpose = \
-        tf2_geometry_msgs.do_transform_pose(pose,transformation)
-    return tfpose
 
 
 
 def getPoint():
-    map_tf_tello = get_transformation("map", "tello")
-    tfpose = transform_pose(map_tf_tello, map_pose.pose)
+    tf_linster.get_transformation()
+    tfpose = tf_linster.transform_pose(map_pose.pose)
     point = tfpose.pose.position
     qutar = tfpose.pose.orientation
 
@@ -86,14 +55,40 @@ def getPoint():
     yaw = yaw*180/math.pi
     return x,y,z,yaw,tfpose.pose
 
-transformation=get_transformation("world","map")
+def calibration(data):
+    global alpha
+    alpha = abs(data.data/tello_origin.pose.position.z) 
 
 
+
+
+tf_linster = simpele_TF(source_frame="map",target_frame="tello")
+#calibration slam world frame and real world frame 
+tf_linster.get_transformation()
+tello_origin = tf_linster.transform_pose(origin)
+
+while alpha == 0:
+    tof = rospy.Subscriber("/tof",Float32,calibration)
+
+
+
+
+#PDcontrll set
+x=PD(P=0.5, D=0.15, scal=0.01*alpha)
+y=PD(P=0.5, D=0.15, scal=0.01*alpha)
+z=PD(P=0.5, D=0.15, scal=0.01*alpha)
+yaw=PD(P=0.008, D=0.002, scal=0.01*alpha)
+
+errox=0
+erroy=0
+erroz=0
+wait_point=0
+erroyaw=0
+
+#set subscriber
+rviz = message_filters.Subscriber("/initialpose", PoseWithCovarianceStamped)
+rviz.registerCallback(callback)
 while not rospy.is_shutdown():
-
-        rviz = message_filters.Subscriber("/initialpose", PoseWithCovarianceStamped)
-        rviz.registerCallback(callback)
-
 
         if wait_point ==1:
             error_x,error_y,error_z,error_yaw,error_pose=getPoint()
@@ -118,7 +113,7 @@ while not rospy.is_shutdown():
             msg = 'rc {} {} {} {}'.format(
                     -1*sp_y,
                     sp_x,
-                    0,
+                    sp_z,
                     -1*sp_yaw
             )
             ctrl.publish(msg)
