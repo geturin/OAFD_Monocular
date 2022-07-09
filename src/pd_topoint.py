@@ -74,10 +74,10 @@ while alpha == 0:
 
 
 #PDcontrll set
-x=PD(P=0.5, D=0.15, scal=0.01*alpha)
-y=PD(P=0.5, D=0.15, scal=0.01*alpha)
-z=PD(P=0.5, D=0.15, scal=0.01*alpha)
-yaw=PD(P=0.008, D=0.002, scal=0.01*alpha)
+x=PD(P=0.9, D=0.25, scal=0.5*alpha)
+y=PD(P=0.9, D=0.25, scal=0.5*alpha)
+z=PD(P=0.9, D=0.25, scal=0.5*alpha)
+yaw=PD(P=0.08, D=0.02, scal=0.05*alpha)
 
 errox=0
 erroy=0
@@ -113,7 +113,7 @@ while not rospy.is_shutdown():
             msg = 'rc {} {} {} {}'.format(
                     -1*sp_y,
                     sp_x,
-                    sp_z,
+                    0,
                     -1*sp_yaw
             )
             ctrl.publish(msg)
