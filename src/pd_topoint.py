@@ -64,6 +64,8 @@ def calibration(data):
 
 tf_linster = simpele_TF(source_frame="map",target_frame="tello")
 #calibration slam world frame and real world frame 
+rospy.sleep(3.)
+
 tf_linster.get_transformation()
 tello_origin = tf_linster.transform_pose(origin)
 
@@ -74,10 +76,20 @@ while alpha == 0:
 
 
 #PDcontrll set
-x=PD(P=0.9, D=0.25, scal=0.5*alpha)
-y=PD(P=0.9, D=0.25, scal=0.5*alpha)
-z=PD(P=0.9, D=0.25, scal=0.5*alpha)
-yaw=PD(P=0.08, D=0.02, scal=0.05*alpha)
+# x=PD(P=0.9, D=1.2, scal=0.15*alpha)
+# y=PD(P=0.9, D=1.2, scal=0.15*alpha)
+# z=PD(P=0.9, D=1.2, scal=0.15*alpha)
+# yaw=PD(P=0.08, D=0.02, scal=0.05*alpha)
+
+#idPDcontrll set
+x=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
+y=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
+z=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
+yaw=idPD(P=0.08, D=0.15, scal=0.05*alpha, alpha=0.1)
+
+
+
+
 
 errox=0
 erroy=0
@@ -104,9 +116,9 @@ while not rospy.is_shutdown():
             sp_yaw = yaw.ctrl(error_yaw)
 
             #set speed max and min
-            sp_x = round(np.clip(sp_x,-35,35))
-            sp_y = round(np.clip(sp_y, -35, 35))
-            sp_z = round(np.clip(sp_z, -35, 35))
+            sp_x = round(np.clip(sp_x,-30,30))
+            sp_y = round(np.clip(sp_y, -30, 30))
+            sp_z = round(np.clip(sp_z, -30, 30))
             sp_yaw = round(np.clip(sp_yaw, -20, 20))
 
 
