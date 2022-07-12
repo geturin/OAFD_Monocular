@@ -21,7 +21,7 @@ error_vector_pub=rospy.Publisher("/error_vector",Pose,queue_size=1)
 
 
 #初始化tf2
-tf_buffer = tf2_ros.Buffer(rospy.Duration(2))
+tf_buffer = tf2_ros.Buffer(rospy.Duration(10))
 tf2_ros.TransformListener(tf_buffer)
 
 
