@@ -20,6 +20,7 @@ DATE_PATH='/mnt/d/data/pointcloud'
 
 def callback(image, pcd):
     global frame,DATE_PATH
+    tflistener.time = image.header.stamp
     #transform pcd form world frame to camera frame
     pcd=tflistener.transform_pcd(pcd)
     #transform msg type
@@ -28,8 +29,8 @@ def callback(image, pcd):
     #image.data=CvBridge().cv2_to_imgmsg(imgdata,"bgr8")
     #cam_pub.publish(image)
 
-    cv2.imwrite(os.path.join(DATE_PATH,'%010d.png'%frame),imgdata,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
-    np.save(os.path.join(DATE_PATH,'%010d.npy'%frame),pcddata)
+    #cv2.imwrite(os.path.join(DATE_PATH,'%010d.png'%frame),imgdata,[int(cv2.IMWRITE_JPEG_QUALITY), 100])
+    #np.save(os.path.join(DATE_PATH,'%010d.npy'%frame),pcddata)
 
     if frame == 1000:
         rospy.signal_shutdown("mission over")

@@ -10,6 +10,7 @@ class simpele_TF(object):
         self.source_frame = source_frame
         self.target_frame = target_frame
         self.creat_listener()
+        self.time = rospy.Time(0)
         return
 
 
@@ -23,7 +24,7 @@ class simpele_TF(object):
     # get the tf at first available time
         try:
             self.transformation = self.tf_buffer.lookup_transform(self.target_frame,
-                    self.source_frame, rospy.Time(0), rospy.Duration(10))
+                    self.source_frame, self.time, rospy.Duration(10))
         except (tf2_ros.LookupException, tf2_ros.ConnectivityException,
                 tf2_ros.ExtrapolationException):
             rospy.logerr('Unable to find the transformation from %s to %s'
