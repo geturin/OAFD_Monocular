@@ -1,0 +1,5 @@
+<launch>
+    <node name="tello_ctrl" pkg="kitti" type="Tello.py" />
+    <node name="PD_ctrl" pkg="kitti" type="pd_topoint.py" />
+    <node name="image_transport" pkg="image_transport" type="republish" args="raw in:=/camera/image_raw out:=/camera/re" />
+</launch>

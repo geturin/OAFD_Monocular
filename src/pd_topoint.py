@@ -82,10 +82,10 @@ while alpha == 0:
 # yaw=PD(P=0.08, D=0.02, scal=0.05*alpha)
 
 #idPDcontrll set
-x=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
-y=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
-z=idPD(P=0.9, D=1.5, scal=0.15*alpha, alpha=0.1)
-yaw=idPD(P=0.08, D=0.15, scal=0.05*alpha, alpha=0.1)
+x=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
+y=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
+z=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
+yaw=idPD(P=0.08, D=2.3, scal=0.05*alpha, alpha=0.1)
 
 
 
