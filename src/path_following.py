@@ -74,7 +74,7 @@ tf_linster = simpele_TF(source_frame="map",target_frame="tello")
 #calibration slam world frame and real world frame 
 rospy.sleep(3.)
 
-tf_linster.get_transformation()
+# tf_linster.get_transformation()
 tello_origin = tf_linster.transform_pose(origin)
 
 while alpha == 0:
@@ -85,10 +85,10 @@ while alpha == 0:
 
 
 #idPDcontrll set
-x=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
-y=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
-z=idPD(P=0.9, D=2.3, scal=0.15*alpha, alpha=0.1)
-yaw=idPD(P=0.08, D=2.3, scal=0.05*alpha, alpha=0.1)
+x=idPD(P=0.83, D=1.65, scal=0.1*alpha, alpha=0.12)
+y=idPD(P=0.83, D=1.65, scal=0.1*alpha, alpha=0.12)
+z=idPD(P=0.81, D=1.78, scal=0.1*alpha, alpha=0.12)
+yaw=idPD(P=0.08, D=0.6, scal=0.05*alpha, alpha=0.1)
 
 
 wait_point=0
@@ -123,9 +123,15 @@ while not rospy.is_shutdown():
 
             if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 20:
                 star = star +1
-            if star >= pointnumber:
-                msg = "land"  
-                print("over!")
+            else:
+                pass
+            # if star >= pointnumber-5:
+            #     msg = "land"  
+            #     rate = rospy.Rate(1)
+            if star >= pointnumber-7:
+                star = 0
+            else:
+                pass
 
             ctrl.publish(msg)
 

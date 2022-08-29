@@ -13,7 +13,6 @@ from cv_bridge import CvBridge
 import message_filters
 import pygame
 
-#
 
 
 
@@ -28,8 +27,8 @@ me.streamon()
 frame=0
 # 创建发布者node 定义发布消息数据类型
 rospy.init_node('tello_node',anonymous=True)
-cam_pub =rospy.Publisher('/camera/image_raw',Image,queue_size=1)
-#cam_pub =rospy.Publisher('/camera/notime',Image,queue_size=1)
+#cam_pub =rospy.Publisher('/camera/image_raw',Image,queue_size=1)
+cam_pub =rospy.Publisher('/camera/notime',Image,queue_size=1)
 
 rate = rospy.Rate(20)
 bridge=CvBridge()
@@ -50,6 +49,8 @@ def getKey(keyName):
     return ans
 
 def getKeyboardInput(speed):
+    global rate
+
     lr, fb, ud, yv,count = 0, 0, 0, 0,0
     key_pressed = 0
     if getKey("UP"):
@@ -92,6 +93,7 @@ def getKeyboardInput(speed):
 
     if count == 1:
         InfoText="land"
+        rate = rospy.Rate(1)
     if count ==2:
         InfoText="takeoff"
 

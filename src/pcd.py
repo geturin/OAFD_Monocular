@@ -56,19 +56,20 @@ mesh_scal=10
 depth_transform = depth_to_pcd(5)
 
 while not rospy.is_shutdown():
-    pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
-    #pcd = pcd_filter(pcd)
-    #栅格化（test）
-    pcd =(mesh_scal*pcd).astype(int)
-    pcd = (pcd.astype(float)/mesh_scal)
-    pcd = np.unique(pcd,axis=0)
+    # pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
+    # #pcd = pcd_filter(pcd)
+    # #栅格化（test）
+    # pcd =(mesh_scal*pcd).astype(int)
+    # pcd = (pcd.astype(float)/mesh_scal)
+    # pcd = np.unique(pcd,axis=0)
 
-    pcd = pcd_filter(pcd)
+    # pcd = pcd_filter(pcd)
 
-    orb_pcd = np.load("/home/kero/catkin_ws/src/kitti/data/orb_pcd.npy")
+    orb_pcd = np.load("/home/kero/catkin_ws/src/kitti/data/testPCD.npy")
 
-    publisher.read_pcd(pcd)
-    publisher.pub(frame_id="map",topic_name='/pointcloud_pub')
+    # publisher.read_pcd(pcd)
+    # publisher.pub(frame_id="map",topic_name='/pointcloud_pub')
+
 
     orb_pub.read_pcd(orb_pcd)
     orb_pub.pub(frame_id="map",topic_name='/orb_pcd')
