@@ -60,6 +60,25 @@ class depth_to_pcd(object):
         pointcloud = vector_array.reshape(-1,3)
         return pointcloud
 
+    def get_rgbpcd(self,depth,rgb):
+        self.depth = cv2.resize(depth, (int(960 / self.resize_scale), int(720 / self.resize_scale)),interpolation=cv2.INTER_NEAREST)
+        vector_array = self.pcd_list.copy()
+        vector_array *= self.depth.reshape((int(720 / self.resize_scale), int(960 / self.resize_scale),1))
+        
+            
+        pointcloud = vector_array.reshape(-1,3)
+
+        rgb = cv2.resize(rgb, (int(960 / self.resize_scale), int(720 / self.resize_scale)),interpolation=cv2.INTER_NEAREST)
+        rgb_list = rgb.reshape(-1,3)
+        r,g,b = rgb_list[:,0].astype(np.uint32), rgb_list[:,1].astype(np.uint32), rgb_list[:,2].astype(np.uint32)
+        rgb = np.array((r << 16) | (g << 8 ) | (b << 0),dtype=np.uint32)
+        color = rgb.reshape(-1,1)
+        color.dtype = np.float32
+
+        rgbpointcloud = np.hstack((pointcloud,color)).astype(np.float32)
+
+        return rgbpointcloud
+
 #标定
 
 class Clibration(object):
