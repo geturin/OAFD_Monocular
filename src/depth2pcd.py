@@ -15,23 +15,41 @@ class depth_to_pcd(object):
         self.resize_camera = np.matrix(self.resize_camera).I
         
         self.pcd_list = np.zeros((720//self.resize_scale,960//self.resize_scale,3))
-        self.get_depth_vector()
+        self.get_depth_vector_v2()
         
         self.pcd_list = self.pcd_list.reshape(-1,1,3)
         self.pcd_list[:,:,0],self.pcd_list[:,:,1],self.pcd_list[:,:,2]=self.pcd_list[:,:,2],-self.pcd_list[:,:,0],-self.pcd_list[:,:,1]
         self.pcd_list = self.pcd_list.reshape(720//self.resize_scale,960//self.resize_scale,3)
         return
 
-    def get_depth_vector(self):
-        fake_depth =np.zeros((720//self.resize_scale,960//self.resize_scale))
-        it = np.nditer(fake_depth, flags=['multi_index'])
-        with it:
-            while not it.finished:
-                self.pixel[0] = it.multi_index[1]
-                self.pixel[1] = it.multi_index[0]
-                point = np.dot(self.resize_camera, self.pixel)          
-                self.pcd_list[it.multi_index] = point[0:3].T[0]
-                it.iternext()
+    # def get_depth_vector(self):
+    #     fake_depth =np.zeros((720//self.resize_scale,960//self.resize_scale))
+    #     it = np.nditer(fake_depth, flags=['multi_index'])
+    #     with it:
+    #         while not it.finished:
+    #             self.pixel[0] = it.multi_index[1]
+    #             self.pixel[1] = it.multi_index[0]
+    #             point = np.dot(self.resize_camera, self.pixel)          
+    #             self.pcd_list[it.multi_index] = point[0:3].T[0]
+    #             it.iternext()
+
+        #new
+    def get_depth_vector_v2(self):
+        u = 960//self.resize_scale
+        v = 720//self.resize_scale
+        u_vector = np.ones((1,u,3))
+        v_vector = np.ones((u,1,3))
+
+        for i in range(u):
+            self.pixel[0] = self.pixel[1] = i
+            point = np.dot(self.resize_camera, self.pixel)
+            u_vector[0,i,0] = point[0]
+            v_vector[i,0,1] = point[1]
+
+        v_vector = v_vector[:v,:,:]
+        v_vector = np.tile(v_vector,(u,1))
+        u_vector = np.tile(u_vector ,(v,1,1))
+        self.pcd_list = v_vector * u_vector
 
     def get_pcd(self, depth):
         self.depth = cv2.resize(depth, (int(960 / self.resize_scale), int(720 / self.resize_scale)),interpolation=cv2.INTER_NEAREST)
