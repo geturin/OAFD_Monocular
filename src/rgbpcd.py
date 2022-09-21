@@ -29,14 +29,21 @@ publisher = pointcloud_pub()
 orb_pub = pointcloud_pub()
 
 frame =0
-rate = rospy.Rate(1)
+rate = rospy.Rate(20)
 mesh_scal=10
 depth_transform = depth_to_pcd(5)
+depth_calibra = Clibration()
 
 pcd_publish = rospy.Publisher("test_pcd",PointCloud2,queue_size=1)
 
 while not rospy.is_shutdown():
-    depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy")   
+    depth=np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy")
+    orb_pcd=np.load("/home/kero/catkin_ws/src/kitti/data/orb_pcd.npy")
+
+    #最小二乘法计算orb点云和ai深度的比例 并缩放ai深度图
+    scale = depth_calibra.depth_calibration(depth.copy(),orb_pcd)
+    depth = scale * depth
+
     bgr = cv2.imread("./data/raw_image.png") 
     rgb = cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB)
 

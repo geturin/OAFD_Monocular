@@ -98,6 +98,35 @@ class Clibration(object):
         camera_pcd[:,1]=-1*orb_pcd["z"]
         camera_pcd[:,2]=orb_pcd["x"]
 
-    #之前写好的重投影代码效率不佳 下次重写
+        reTransform=cv2.projectPoints(camera_pcd,self.rotation,self.translation,self.camera,self.distortion)
+        reTransform = reTransform[0][:,0].astype(int)
+
+        pixel = reTransform
+        filter = np.where((pixel[:,0]<=960)&(pixel[:,1]<=720))
+        pixel = pixel[filter]
+        depth = camera_pcd[:,2].reshape(-1,1)[filter]
+
+        self.depth_image=np.zeros((720,960))
+        self.depth_image[pixel[:,1],pixel[:,0]] = depth[:,0]
+
+        return self.depth_image
+
+    def depth_calibration(self,ai_depth,orb_pcd):
+        orb_depth = self.orb_pcd_reprojet(orb_pcd)
+        #去除ai深度图远端畸变严重部分
+        ai_depth[ai_depth>0.1]=0
+
+        #选出ai深度图以及orb稀疏深度图都有深度值的地方
+        filter = np.where((ai_depth!=0)&(orb_depth!=0))
+        ai_list = ai_depth[filter]
+        orb_list = orb_depth[filter]
+
+        ai_list = ai_list.reshape(-1,1)
+        orb_list = orb_list.reshape(-1,1)
+
+        #最小二乘计算尺度
+        scale=np.linalg.lstsq(ai_list,orb_list)[0]
+
+        return scale
 
 
