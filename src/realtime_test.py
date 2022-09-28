@@ -45,11 +45,9 @@ def callback(image,depth,pcd):
         #get depth map and rgb image
         rgb = bridge.imgmsg_to_cv2(image,"rgb8")
         #test scale
-        depth = bridge.imgmsg_to_cv2(depth,"32FC1")
-        try:
-            depth = 1/depth
-        except:
-            return
+        depth = bridge.imgmsg_to_cv2(depth,"32FC1")     
+        depth = 1/depth
+
         # depth =  depth[:,:,0]
 
         #orb_pcd world->camera
@@ -82,6 +80,6 @@ camera_sub = message_filters.Subscriber('/camera/image_raw', Image)
 depth_sub = message_filters.Subscriber('/camera/depth', Image)
 pcd_sub = message_filters.Subscriber('/orb_slam3_ros/map_points', PointCloud2)
 
-ts = message_filters.TimeSynchronizer([camera_sub, depth_sub,pcd_sub], 1)
+ts = message_filters.TimeSynchronizer([camera_sub, depth_sub,pcd_sub], 3)
 ts.registerCallback(callback)
 rospy.spin()
