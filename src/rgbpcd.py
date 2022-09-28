@@ -37,18 +37,14 @@ depth_calibra = Clibration()
 pcd_publish = rospy.Publisher("test_pcd",PointCloud2,queue_size=1)
 
 while not rospy.is_shutdown():
-    depth=np.load("/mnt/d/code/DPT/%010d.npy"%frame)
-    orb_pcd=np.load("/mnt/d/data/pointcloud/%010d.npy"%frame)
+    depth=np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy")
+    orb_pcd=np.load("/home/kero/catkin_ws/src/kitti/data/orb_pcd.npy")
 
     #最小二乘法计算orb点云和ai深度的比例 并缩放ai深度图
-    try:
-        scale = depth_calibra.depth_calibration(depth.copy(),orb_pcd)
-    except:
-        scale = 15
-
+    scale = depth_calibra.depth_calibration(depth.copy(),orb_pcd)
     depth = scale * depth
 
-    bgr = cv2.imread("/mnt/d/data/pointcloud/%010d.png"%frame)
+    bgr = cv2.imread("./data/raw_image.png") 
     rgb = cv2.cvtColor(bgr,cv2.COLOR_BGR2RGB)
 
 
@@ -68,6 +64,4 @@ while not rospy.is_shutdown():
 
     msg = pcd2.create_cloud(header=header,fields=fields,points=rgbpcd )
     pcd_publish.publish(msg)
-
-    frame +=1
     rate.sleep()

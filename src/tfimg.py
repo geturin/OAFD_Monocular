@@ -12,7 +12,7 @@ img_pub = rospy.Publisher("/camera/image_raw0", Image, queue_size=10)
 
 def publish_image(imgdata,img_pub):
     img =imgdata
-    img.header.stamp=rospy.Time.now()
+    # img.header.stamp=rospy.Time.now()
 
     img_pub.publish(img)
 
