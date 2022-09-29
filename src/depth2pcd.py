@@ -102,7 +102,7 @@ class Clibration(object):
         reTransform = reTransform[0][:,0].astype(int)
 
         pixel = reTransform
-        filter = np.where((pixel[:,0]<=960)&(pixel[:,1]<=720))
+        filter = np.where((pixel[:,0]<960)&(pixel[:,1]<720)&(pixel[:,0]>=0)&(pixel[:,1]>=0))
         pixel = pixel[filter]
         depth = camera_pcd[:,2].reshape(-1,1)[filter]
 
@@ -114,7 +114,7 @@ class Clibration(object):
     def depth_calibration(self,ai_depth,orb_pcd):
         orb_depth = self.orb_pcd_reprojet(orb_pcd)
         #去除ai深度图远端畸变严重部分
-        ai_depth[ai_depth>0.1]=0
+        ai_depth[ai_depth>0.04]=0
 
         #选出ai深度图以及orb稀疏深度图都有深度值的地方
         filter = np.where((ai_depth!=0)&(orb_depth!=0))
