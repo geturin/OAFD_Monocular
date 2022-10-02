@@ -9,7 +9,7 @@ class depth_to_pcd(object):
         self.resize_scale = resize_scale
         self.resize_camera = np.array((910.072 / self.resize_scale, 0, 485.523 / self.resize_scale, 0,
                                        0, 914.094 / self.resize_scale, 336.718 / self.resize_scale, 0,
-                                       0, 0, 1, 0), dtype="float").reshape(3, 4)
+                                       0, 0, 1, 0), dtype=np.float32).reshape(3, 4)
 
         self.pixel = np.array([0,0,1]).reshape(3,-1)
         self.resize_camera = np.matrix(self.resize_camera).I
@@ -84,12 +84,12 @@ class depth_to_pcd(object):
 class Clibration(object):
 
     def __init__(self) -> None:
-        self.rotation=np.array([0,0,0],dtype="float").reshape(3,1)
-        self.translation=np.array([0,0,0],dtype="float").reshape(1,3)
+        self.rotation=np.array([0,0,0],dtype=np.float32).reshape(3,1)
+        self.translation=np.array([0,0,0],dtype=np.float32).reshape(1,3)
         self.distortion=np.array([[-0.005941,0.055161,-0.006094,0.003192]])
         self.camera=np.array((910.072,0,485.523,
                 0,914.094,336.718,
-                0,0,1),dtype="float").reshape(3,3)
+                0,0,1),dtype=np.float32).reshape(3,3)
         pass
     
     def orb_pcd_reprojet(self,orb_pcd):
@@ -114,7 +114,7 @@ class Clibration(object):
     def depth_calibration(self,ai_depth,orb_pcd):
         orb_depth = self.orb_pcd_reprojet(orb_pcd)
         #去除ai深度图远端畸变严重部分
-        ai_depth[ai_depth>0.04]=0
+        ai_depth[ai_depth>0.055]=0
 
         #选出ai深度图以及orb稀疏深度图都有深度值的地方
         filter = np.where((ai_depth!=0)&(orb_depth!=0))

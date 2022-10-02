@@ -63,13 +63,15 @@ def callback(image,depth,pcd):
         scale = depth_calibra.depth_calibration(depth,pcd)
         depth = scale * depth
 
+        # #with out calibration test
+        # depth[depth>0.55]=0
+        # depth = 20*depth
+
 
         # to pointlcoud
         rgbpcd = depth_transform.get_rgbpcd(depth,rgb)
-
         header = Header()
         header.frame_id = "camera"
-
         msg = pcd2.create_cloud(header=header,fields=fields,points=rgbpcd )
         pcd_publish.publish(msg)
         return

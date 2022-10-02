@@ -27,8 +27,8 @@ me.streamon()
 frame=0
 # 创建发布者node 定义发布消息数据类型
 rospy.init_node('tello_node',anonymous=True)
-#cam_pub =rospy.Publisher('/camera/image_raw',Image,queue_size=1)
-cam_pub =rospy.Publisher('/camera/notime',Image,queue_size=1)
+cam_pub =rospy.Publisher('/camera/image_raw',Image,queue_size=1)
+# cam_pub =rospy.Publisher('/camera/notime',Image,queue_size=1)
 
 rate = rospy.Rate(20)
 bridge=CvBridge()
@@ -37,6 +37,21 @@ bridge=CvBridge()
 def init():
     pygame.init()
     win = pygame.display.set_mode((400, 400))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
 
 def getKey(keyName):
     ans = False
