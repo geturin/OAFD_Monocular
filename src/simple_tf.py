@@ -3,6 +3,8 @@ import rospy
 import tf2_geometry_msgs
 import tf2_ros
 import tf2_sensor_msgs
+import ros_numpy
+import numpy as np
 
 class simpele_TF(object):
     
@@ -32,6 +34,15 @@ class simpele_TF(object):
                             % self.source_frame, self.target_frame)
         return 
 
+    def get_inverse_transformation(self):
+        self.inverse_transformation = self.transformation
+        self.inverse_transformation.header.frame_id = self.source_frame
+        tf = ros_numpy.geometry.transform_to_numpy(self.inverse_transformation.transform)
+        tf = np.matrix(tf).I
+        self.inverse_transformation.transform = ros_numpy.geometry.numpy_to_transform(tf)
+
+
+
     def transform_pose(self,pose):
         self.get_transformation()   
         self.tfpose =  tf2_geometry_msgs.do_transform_pose(pose,self.transformation)
@@ -40,4 +51,9 @@ class simpele_TF(object):
     def transform_pcd(self,pcd):
         self.get_transformation()   
         self.pcd =  tf2_sensor_msgs.do_transform_cloud(pcd,self.transformation)
+        return self.pcd
+
+    def inverse_transform_pcd(self,pcd):
+        self.get_inverse_transformation()   
+        self.pcd =  tf2_sensor_msgs.do_transform_cloud(pcd,self.inverse_transformation)
         return self.pcd

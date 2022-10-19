@@ -7,6 +7,7 @@ import numpy as np
 import cv2
 from depth2pcd import *
 import pcl
+from nav_msgs.msg import Odometry
 
 
 
@@ -55,8 +56,12 @@ rate = rospy.Rate(1)
 mesh_scal=10
 depth_transform = depth_to_pcd(5)
 
+odom_pub = rospy.Publisher("/visual_slam/odom", Odometry, queue_size=1)
+odom = Odometry()
+odom.child_frame_id = "camera"
+
 while not rospy.is_shutdown():
-    # pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
+    pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
     # #pcd = pcd_filter(pcd)
     # #栅格化（test）
     # pcd =(mesh_scal*pcd).astype(int)
@@ -65,14 +70,15 @@ while not rospy.is_shutdown():
 
     # pcd = pcd_filter(pcd)
 
-    orb_pcd = np.load("/home/kero/catkin_ws/src/kitti/data/testPCD.npy")
+    # orb_pcd = np.load("/home/kero/catkin_ws/src/kitti/data/testPCD.npy")
 
-    # publisher.read_pcd(pcd)
-    # publisher.pub(frame_id="map",topic_name='/pointcloud_pub')
+    publisher.read_pcd(pcd)
+    publisher.pub(frame_id="world",topic_name='/test_pcd')
 
+    odom_pub.publish(odom)
 
-    orb_pub.read_pcd(orb_pcd)
-    orb_pub.pub(frame_id="map",topic_name='/orb_pcd')
+    # orb_pub.read_pcd(orb_pcd)
+    # orb_pub.pub(frame_id="map",topic_name='/orb_pcd')
 
     
     rate.sleep() 

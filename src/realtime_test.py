@@ -61,7 +61,7 @@ def callback(image,depth,pcd):
         #最小二乘法计算orb点云和ai深度的比例 并缩放ai深度图
         pcd = ros_numpy.numpify(pcd)#pointcloud2 msg -> numpy arry
         scale = depth_calibra.depth_calibration(depth,pcd)
-        depth = scale * depth
+        depth = 6*scale * depth
 
         # #with out calibration test
         # depth[depth>0.55]=0
@@ -72,7 +72,9 @@ def callback(image,depth,pcd):
         rgbpcd = depth_transform.get_rgbpcd(depth,rgb)
         header = Header()
         header.frame_id = "camera"
-        msg = pcd2.create_cloud(header=header,fields=fields,points=rgbpcd )
+        msg = pcd2.create_cloud(header=header,fields=fields,points=rgbpcd)
+
+        msg = tflistener.inverse_transform_pcd(msg)
         pcd_publish.publish(msg)
         return
 

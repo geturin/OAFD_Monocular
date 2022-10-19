@@ -49,7 +49,6 @@ if __name__ =='__main__':
 
 
 
-        rospy.loginfo(' publisher')
         rate.sleep()
         #
         frame=frame+1
