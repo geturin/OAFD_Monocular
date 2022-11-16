@@ -7,7 +7,6 @@ from std_msgs.msg import Header
 from cv_bridge import CvBridge
 import cv2
 import numpy as np
-import time
 
 
 DATE_PATH='/home/kero/data/kitti/2011_09_26/2011_09_26_drive_0005_sync/'
@@ -24,15 +23,14 @@ if __name__ =='__main__':
 
     rate = rospy.Rate(10)
     bridge=CvBridge()
-    while not rospy.is_shutdown():
+    while frame <= 153:
         pubimg=Image()
         header=Header()
         header.stamp=rospy.Time.now()
-        header.frame_id="map"
-        time0=time.time()
+        header.frame_id="world"
         # 发布摄像机图片
         img=cv2.imread(os.path.join(DATE_PATH,'image_02/data/%010d.png'%frame))
-        pubimg.data =  bridge.cv2_to_imgmsg(img,'bgr8')
+        pubimg =  bridge.cv2_to_imgmsg(img,'bgr8')
         pubimg.header=header
         cam_pub.publish(pubimg)
 
@@ -52,4 +50,4 @@ if __name__ =='__main__':
         rate.sleep()
         #
         frame=frame+1
-        frame%=100
+
