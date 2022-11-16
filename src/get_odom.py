@@ -1,5 +1,4 @@
 #!/usr/bin/python3.8
-from turtle import position
 import rospy
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry

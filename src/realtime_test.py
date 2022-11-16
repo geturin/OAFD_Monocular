@@ -74,6 +74,7 @@ def callback(image,depth,pcd):
         header.frame_id = "camera"
         msg = pcd2.create_cloud(header=header,fields=fields,points=rgbpcd)
 
+        #取得world->camera的逆矩阵
         msg = tflistener.inverse_transform_pcd(msg)
         pcd_publish.publish(msg)
         return
