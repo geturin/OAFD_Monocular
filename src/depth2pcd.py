@@ -113,10 +113,13 @@ class Clibration(object):
 
     def depth_calibration(self,ai_depth,orb_pcd):
         orb_depth = self.orb_pcd_reprojet(orb_pcd)
-        #去除ai深度图远端畸变严重部分
-        ai_depth[ai_depth>0.055]=0
+        #消除前10%远的点
+        filter = np.percentile(ai_depth,90)
+        ai_depth[ai_depth>filter]=0
 
-        #选出ai深度图以及orb稀疏深度图都有深度值的地方
+        #去除无穷大值
+        ai_depth[np.isinf(ai_depth)] = 0
+        #选出ai深度图以及orb稀疏深度图都有深度值的地方  
         filter = np.where((ai_depth!=0)&(orb_depth!=0))
         ai_list = ai_depth[filter]
         orb_list = orb_depth[filter]
