@@ -61,7 +61,8 @@ odom = Odometry()
 odom.child_frame_id = "camera"
 
 while not rospy.is_shutdown():
-    pcd = depth_transform.get_pcd(depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy"))
+    depth=15.11806784*np.load("/home/kero/catkin_ws/src/kitti/data/ai_depth.npy")
+    pcd = depth_transform.get_pcd(depth)
     # #pcd = pcd_filter(pcd)
     # #栅格化（test）
     # pcd =(mesh_scal*pcd).astype(int)

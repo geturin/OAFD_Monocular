@@ -91,11 +91,6 @@ yaw=idPD(P=0.08, D=2.3, scal=0.05*alpha, alpha=0.1)
 
 
 
-errox=0
-erroy=0
-erroz=0
-wait_point=0
-erroyaw=0
 
 #set subscriber
 rviz = message_filters.Subscriber("/initialpose", PoseWithCovarianceStamped)

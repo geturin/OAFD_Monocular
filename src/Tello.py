@@ -23,7 +23,7 @@ rate = rospy.Rate(20)
 bridge=CvBridge()
 
 #count==0 take off
-count=0
+count=1
 
 def callback(data):
     global command

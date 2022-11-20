@@ -23,7 +23,7 @@ def callback(data):
 
     #缩放坐标轴
     point = ros_numpy.geometry.point_to_numpy(odom.pose.pose.position)
-    point *=6
+    point *=1
     odom.pose.pose.position = ros_numpy.geometry.numpy_to_point(point)
 
     fake_pose.pose = odom.pose.pose
