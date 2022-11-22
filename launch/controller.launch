@@ -1,0 +1,5 @@
+<launch>
+    <node name="tello_ctrl" pkg="kitti" type="Tello.py" />
+    <node name="PD_ctrl" pkg="kitti" type="planner_ctrl.py" />
+
+</launch>

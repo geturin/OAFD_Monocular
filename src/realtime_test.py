@@ -30,16 +30,18 @@ fields = [  PointField("x",0,PointField.FLOAT32,1),
             PointField("rgb",12,PointField.FLOAT32,1)]
 pcd_publish = rospy.Publisher("test_pcd",PointCloud2,queue_size=1)
 
+#get map2world transform
+map2world = simpele_TF("map","world")
 
 def callback(image,depth,pcd):
     global depth_transform , depth_calibra , start , bridge , fields , pcd_publish,tflistener
 
     if start==0:
         try:
-            tflistener = simpele_TF("world","camera")
+            tflistener = simpele_TF("map","camera")
             start = 1
         except:
-            print("cant get tranform from world to camera  ,wait transform")
+            print("cant get tranform from map to camera  ,wait transform")
             return
     else:
         #get depth map and rgb image
@@ -50,7 +52,7 @@ def callback(image,depth,pcd):
 
         # depth =  depth[:,:,0]
 
-        #orb_pcd world->camera
+        #orb_pcd map->camera
         tflistener.time = image.header.stamp
         try:
           pcd=tflistener.transform_pcd(pcd)
@@ -80,8 +82,10 @@ def callback(image,depth,pcd):
         header.frame_id = "camera"
         msg =pcd2.create_cloud_xyz32(header,pcd)
 
-        #取得world->camera的逆矩阵
+        #取得map->camera的逆矩阵
         msg = tflistener.inverse_transform_pcd(msg)
+        msg = map2world.transform_pcd(msg)
+        msg.header.frame_id = "world"
         pcd_publish.publish(msg)
         return
 
