@@ -71,16 +71,16 @@ def callback(image,depth,pcd):
 
 
         # to rgb pointlcoud
-        # pcd = depth_transform.get_rgbpcd(depth,rgb)
-        # header = Header()
-        # header.frame_id = "camera"
-        # msg = pcd2.create_cloud(header=header,fields=fields,points=pcd)
-       
-        # to pointcloud
-        pcd = depth_transform.get_pcd(depth)
+        pcd = depth_transform.get_rgbpcd(depth,rgb)
         header = Header()
         header.frame_id = "camera"
-        msg =pcd2.create_cloud_xyz32(header,pcd)
+        msg = pcd2.create_cloud(header=header,fields=fields,points=pcd)
+       
+        # to pointcloud
+        # pcd = depth_transform.get_pcd(depth)
+        # header = Header()
+        # header.frame_id = "camera"
+        # msg =pcd2.create_cloud_xyz32(header,pcd)
 
         #取得map->camera的逆矩阵
         msg = tflistener.inverse_transform_pcd(msg)

@@ -39,19 +39,22 @@ pointnumber = 0
 map_pose = PoseStamped()
 
 def callback(data):
-    global map_pose,wait_point,pointnumber
-    if pointnumber == 0:
-        pointnumber = len(data.points)
-    else:
-        pass
+    global map_pose,wait_point,pointnumber,star
 
-    map_pose.pose.position=data.points[0]
+
+    if pointnumber!=len(data.points):
+         pointnumber = len(data.points)
+         star = star-3
+         star = np.clip(star,0,5)
+
+    map_pose.pose.position=data.points[star]
     wait_point=1
 
 
 
 
 def getPoint():
+    tf_linster.time = rospy.Time.now()
     tf_linster.get_transformation()
     tfpose = tf_linster.transform_pose(map_pose)
     point = tfpose.pose.position
@@ -85,10 +88,9 @@ while alpha == 0:
 
 
 #idPDcontrll set
-x=idPD(P=0.83, D=1.65, scal=0.1*alpha, alpha=0.12)
-y=idPD(P=0.83, D=1.65, scal=0.1*alpha, alpha=0.12)
-z=idPD(P=0.81, D=1.78, scal=0.1*alpha, alpha=0.12)
-yaw=idPD(P=0.08, D=0.6, scal=0.05*alpha, alpha=0.1)
+x=PD(P=0.83, D=1.85, scal=0.35*alpha)
+y=PD(P=0.83, D=1.85, scal=0.35*alpha)
+z=PD(P=0.92, D=1.75, scal=0.35*alpha)
 
 
 wait_point=0
@@ -105,36 +107,33 @@ while not rospy.is_shutdown():
             sp_x =x.ctrl(error_x)
             sp_y = y.ctrl(error_y)
             sp_z = z.ctrl(error_z)
-            sp_yaw = yaw.ctrl(error_yaw)
 
             #set speed max and min
             sp_x = round(np.clip(sp_x,-30,30))
             sp_y = round(np.clip(sp_y, -30, 30))
             sp_z = round(np.clip(sp_z, -30, 30))
-            sp_yaw = round(np.clip(sp_yaw, -20, 20))
 
 
             msg = 'rc {} {} {} {}'.format(
                     -1*sp_y,
                     sp_x,
                     sp_z,
-                    -1*sp_yaw
+                    0
             )
 
-            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 20:
+
+
+            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 25:
                 star = star +1
+                star = np.clip(star,0,7)
             else:
                 pass
-            # if star >= pointnumber-5:
-            #     msg = "land"  
-            #     rate = rospy.Rate(1)
-            if star >= pointnumber-7:
-                star = 0
-            else:
-                pass
+
+            
+            if pointnumber<=10:
+                star = pointnumber-1
 
             ctrl.publish(msg)
-
         else   :
             pass
 

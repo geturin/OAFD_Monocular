@@ -72,11 +72,16 @@ class depth_to_pcd(object):
         
             
         pointcloud = vector_array.reshape(-1,3)
-        #去除所有的0，0，0点
-        pointcloud = pointcloud[pointcloud.sum(axis=1)!=0,:]
+        
 
         rgb = cv2.resize(rgb, (int(960 / self.resize_scale), int(720 / self.resize_scale)),interpolation=cv2.INTER_NEAREST)
         rgb_list = rgb.reshape(-1,3)
+
+        #去除所有的0，0，0点
+        rgb_list = rgb_list[pointcloud.sum(axis=1)!=0,:]
+        pointcloud = pointcloud[pointcloud.sum(axis=1)!=0,:]
+
+
         r,g,b = rgb_list[:,0].astype(np.uint32), rgb_list[:,1].astype(np.uint32), rgb_list[:,2].astype(np.uint32)
         rgb = np.array((r << 16) | (g << 8 ) | (b << 0),dtype=np.uint32)
         color = rgb.reshape(-1,1)
@@ -120,8 +125,8 @@ class Clibration(object):
 
     def depth_calibration(self,ai_depth,orb_pcd):
         orb_depth = self.orb_pcd_reprojet(orb_pcd)
-        #消除前15%远的点
-        filter = np.percentile(ai_depth,85)
+        #消除前20%远的点
+        filter = np.percentile(ai_depth,80)
         ai_depth[ai_depth>filter]=0
 
         #去除无穷大值
