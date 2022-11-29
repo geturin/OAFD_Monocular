@@ -37,6 +37,7 @@ origin.pose.position.z = 0
 star = 0
 pointnumber = 0
 map_pose = PoseStamped()
+goal_pose = PoseStamped()
 
 def callback(data):
     global map_pose,wait_point,pointnumber,star
@@ -48,6 +49,7 @@ def callback(data):
          star = np.clip(star,0,5)
 
     map_pose.pose.position=data.points[star]
+    goal_pose.pose.position = data.points[pointnumber-1]
     wait_point=1
 
 
@@ -57,14 +59,16 @@ def getPoint():
     tf_linster.time = rospy.Time.now()
     tf_linster.get_transformation()
     tfpose = tf_linster.transform_pose(map_pose)
+    goal = tf_linster.transform_pose(goal_pose)
     point = tfpose.pose.position
     qutar = tfpose.pose.orientation
 
     x = point.x
     y = point.y
     z = point.z
-    yaw =  math.atan2(2*(qutar.w*qutar.z+qutar.x*qutar.y),1-2*(qutar.z*qutar.z+qutar.y*qutar.y))
-    yaw = yaw*180/math.pi
+    # yaw =  math.atan2(2*(qutar.w*qutar.z+qutar.x*qutar.y),1-2*(qutar.z*qutar.z+qutar.y*qutar.y))
+    # yaw = yaw*180/math.pi
+    yaw = goal.pose.position.y
     return x,y,z,yaw,tfpose.pose
 
 def calibration(data):
@@ -88,9 +92,11 @@ while alpha == 0:
 
 
 #idPDcontrll set
-x=PD(P=0.83, D=1.85, scal=0.35*alpha)
-y=PD(P=0.83, D=1.85, scal=0.35*alpha)
-z=PD(P=0.92, D=1.75, scal=0.35*alpha)
+x=PD(P=0.83, D=1.85, scal=0.3*alpha)
+y=PD(P=0.83, D=1.85, scal=0.3*alpha)
+z=PD(P=0.92, D=1.75, scal=0.3*alpha)
+
+yaw=PD(P=0.83, D=1.85, scal=0.3*alpha)
 
 
 wait_point=0
@@ -108,22 +114,26 @@ while not rospy.is_shutdown():
             sp_y = y.ctrl(error_y)
             sp_z = z.ctrl(error_z)
 
+            sp_yaw = yaw.ctrl(error_yaw)
+
             #set speed max and min
             sp_x = round(np.clip(sp_x,-30,30))
             sp_y = round(np.clip(sp_y, -30, 30))
             sp_z = round(np.clip(sp_z, -30, 30))
+
+            sp_yaw = round(np.clip(sp_yaw, -20, 20))
 
 
             msg = 'rc {} {} {} {}'.format(
                     -1*sp_y,
                     sp_x,
                     sp_z,
-                    0
+                    -1*sp_yaw
             )
 
 
 
-            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 25:
+            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 20:
                 star = star +1
                 star = np.clip(star,0,7)
             else:
