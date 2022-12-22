@@ -121,7 +121,7 @@ while not rospy.is_shutdown():
                     -1*sp_yaw
             )
 
-            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 20:
+            if abs(sp_y)+abs(sp_x)+abs(sp_z) <= 22:
                 star = star +1
             else:
                 pass

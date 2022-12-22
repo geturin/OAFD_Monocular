@@ -9,7 +9,7 @@ import message_filters
 from simple_tf import *
 from cv_bridge import CvBridge
 import ros_numpy
-
+import pcl.pcl_visualization
 
 
 
@@ -78,9 +78,20 @@ def callback(image,depth,pcd):
        
         # to pointcloud
         # pcd = depth_transform.get_pcd(depth)
+
+        # #pcl filter test
+        # p = pcl.PointCloud(np.array(pcd, dtype=np.float32))
+        # fil = p.make_statistical_outlier_filter()
+        # fil.set_mean_k(40)
+        # fil.set_std_dev_mul_thresh(1.5)
+        # pcd = fil.filter()
+        # pcd=pcd.to_array()
+
         # header = Header()
         # header.frame_id = "camera"
         # msg =pcd2.create_cloud_xyz32(header,pcd)
+
+
 
         #取得map->camera的逆矩阵
         msg = tflistener.inverse_transform_pcd(msg)

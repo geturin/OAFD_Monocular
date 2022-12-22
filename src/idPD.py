@@ -10,8 +10,8 @@ class PD(object):
         self.lasterror = 0
     
     def ctrl(self,error):
-
-        result = self.P*error+self.D*(error-self.lasterror)
+        self.de = self.D*(error-self.lasterror)
+        result = self.P*error + self.de
         result *= self.scal
         self.lasterror = error
         return result
@@ -28,13 +28,13 @@ class idPD(object):
         self.lastdev = 0
 
     def ctrl(self,error):
-        dev = self.D*(1-self.alpha)*(error-self.lasterror)+self.alpha*self.lastdev
+        self.dev = self.D*(1-self.alpha)*(error-self.lasterror)+self.alpha*self.lastdev
 
-        result = self.P*error+dev
+        result = self.P*error+self.dev
         result *= self.scal
 
         self.lasterror = error
-        self.lastdev = dev
+        self.lastdev = self.dev
 
         return result
 
