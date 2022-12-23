@@ -5,7 +5,7 @@ use monocular depth estimation and monocular visual SLAM to construct an autonom
 ![](./data/my%20systeam%20en.drawio.svg)
 
 
-https://video.twimg.com/ext_tw_video/1600770896742207488/pu/vid/1280x720/rZeuK4X96Ow-VtjS.
+https://video.twimg.com/ext_tw_video/1600770896742207488/pu/vid/1280x720/rZeuK4X96Ow-VtjS.mp4
 
 [more experiment video](https://youtube.com/playlist?list=PLQYTjwXEt_RxlJJVSr9-HWyi-2qyCrkhP)
 
