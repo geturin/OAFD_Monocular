@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>kitti</name>
+  <name>OAFD_Monocular</name>
   <version>0.0.0</version>
-  <description>The kitti package</description>
+  <description>The OAFD_Monocular package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
