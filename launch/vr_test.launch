@@ -1,3 +1,0 @@
-<launch>
-    <node name="image_transport" pkg="image_transport" type="republish" args="raw in:=/camera/image_raw out:=/camera/re" />
-</launch>
