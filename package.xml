@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>OAFD_Monocular</name>
+  <name>oafd</name>
   <version>0.0.0</version>
-  <description>The OAFD_Monocular package</description>
+  <description>The oafd package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
