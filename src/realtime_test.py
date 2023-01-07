@@ -9,7 +9,7 @@ import message_filters
 from simple_tf import *
 from cv_bridge import CvBridge
 import ros_numpy
-import pcl.pcl_visualization
+# import pcl.pcl_visualization
 
 
 
