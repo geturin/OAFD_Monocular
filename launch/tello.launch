@@ -4,7 +4,7 @@
      <!-- calibration monocular depth -->
      <node pkg="oafd" type="realtime_test.py" name="depth_calibration"/>
      <!-- path tracking -->
-     <node pkg="oafd" type="planner_ctrl.py" name="PDctrl"/>
+     <!-- <node pkg="oafd" type="planner_ctrl.py" name="PDctrl"/> -->
 
 
 </launch>

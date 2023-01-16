@@ -86,7 +86,7 @@ class tello_ros:
 
     def shutdown(self):
         self.drone.streamoff()
-        self.drone.send_command_with_return("land")
+        self.drone.send_command_without_return("land")
 
 if __name__ == "__main__":
     rospy.init_node("tello_driver")
