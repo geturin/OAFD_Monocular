@@ -23,10 +23,8 @@ def callback(data):
         0,
         yaw
         )
+    ctrl.publish(msg)
 
     
 sub = rospy.Subscriber("/cmd_vel", Twist, callback, queue_size=1)
-
-while not rospy.is_shutdown():
-    ctrl.publish(msg)
-    rate.sleep()
+rospy.spin()
