@@ -18,4 +18,5 @@
   </node>
   <!-- cmd vel to command -->
     <node name="tello_ctrl" pkg="oafd" type="cmd_vel2command.py" />
+    <node pkg="oafd" type="Tello_node.py" name="tello_driver"/>
 </launch>
