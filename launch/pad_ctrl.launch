@@ -1,16 +1,21 @@
 <launch>
+    <!-- Load the Joy node -->
+  <node name="joy_node" pkg="joy" type="joy_node" output="screen">
+    <param name="autorepeat_rate" value="10.0"/>
+  </node>
+
   <!-- Launch joy to cmd vel converter -->
-    <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
+  <node pkg="teleop_twist_joy" type="teleop_node" name="teleop_node" output="screen">
     <param name="enable_button" value="4"/>
     <param name="axis_linear/x" value="1"/>
-    <param name="scale_linear/x" value="0.5"/>
+    <param name="scale_linear/x" value="15"/>
 
     <param name="axis_linear/y" value="0"/>
-    <param name="scale_linear/y" value="0.5"/>
+    <param name="scale_linear/y" value="15"/>
 
     <param name="axis_angular" value="3"/>
-    <param name="scale_angular" value="1"/>
-    </node>
+    <param name="scale_angular" value="0.4"/>
+  </node>
   <!-- cmd vel to command -->
     <node name="tello_ctrl" pkg="oafd" type="cmd_vel2command.py" />
 </launch>
