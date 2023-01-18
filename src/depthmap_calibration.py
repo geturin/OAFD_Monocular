@@ -9,7 +9,6 @@ import message_filters
 from simple_tf import *
 from cv_bridge import CvBridge
 import ros_numpy
-# import pcl.pcl_visualization
 
 
 
@@ -90,17 +89,13 @@ def callback(image,depth,pcd):
         # header = Header()
         # header.frame_id = "camera"
         # msg =pcd2.create_cloud_xyz32(header,pcd)
-
-
-
-        #取得map->camera的逆矩阵
+        
+       #取得map->camera的逆矩阵
         msg = tflistener.inverse_transform_pcd(msg)
         msg = map2world.transform_pcd(msg)
         msg.header.frame_id = "world"
         pcd_publish.publish(msg)
         return
-
-
 
 camera_sub = message_filters.Subscriber('/camera/image_raw', Image)
 depth_sub = message_filters.Subscriber('/camera/depth', Image)

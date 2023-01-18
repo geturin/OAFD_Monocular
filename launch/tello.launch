@@ -2,7 +2,7 @@
     <!-- tello driver  -->
      <node pkg="oafd" type="Tello_node.py" name="tello_driver"/>
      <!-- calibration monocular depth -->
-     <node pkg="oafd" type="realtime_test.py" name="depth_calibration"/>
+     <node pkg="oafd" type="depthmap_calibration.py" name="depth_calibration"/>
      <!-- path tracking -->
      <!-- <node pkg="oafd" type="planner_ctrl.py" name="PDctrl"/> -->
 
