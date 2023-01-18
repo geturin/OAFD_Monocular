@@ -12,5 +12,5 @@
     <param name="scale_angular" value="1"/>
     </node>
   <!-- cmd vel to command -->
-    <node name="tello_ctrl" pkg="OAFD_Monocular" type="cmd_vel2command.py" />
+    <node name="tello_ctrl" pkg="oafd" type="cmd_vel2command.py" />
 </launch>
