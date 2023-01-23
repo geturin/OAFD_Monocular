@@ -125,8 +125,8 @@ class Clibration(object):
 
     def depth_calibration(self,ai_depth,orb_pcd):
         orb_depth = self.orb_pcd_reprojet(orb_pcd)
-        #消除前33%远的点
-        filter = np.percentile(ai_depth,66)
+        #消除前30%远的点
+        filter = np.percentile(ai_depth,70)
         ai_depth[ai_depth>filter]=0
 
         #去除无穷大值

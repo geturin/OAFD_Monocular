@@ -16,7 +16,7 @@
     <!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find orb_slam3_ros_wrapper)/config/orb_slam3.rviz" output="screen" /> -->
 
     <!-- depth 2 pcd -->
-    <node pkg="oafd" type="realtime_test.py" name="pcd_pub"/>
+    <node pkg="oafd" type="depthmap_calibration.py" name="pcd_pub"/>
     <!-- tf2odom -->
     <node pkg="oafd" type="get_odom.py" name="odom_pub"/>
     

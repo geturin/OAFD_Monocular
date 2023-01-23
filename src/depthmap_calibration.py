@@ -32,8 +32,10 @@ pcd_publish = rospy.Publisher("test_pcd",PointCloud2,queue_size=1)
 #get map2world transform
 map2world = simpele_TF("map","world")
 
+scale = 20
+
 def callback(image,depth,pcd):
-    global depth_transform , depth_calibra , start , bridge , fields , pcd_publish,tflistener
+    global depth_transform , depth_calibra , start , bridge , fields , pcd_publish,tflistener ,scale
 
     if start==0:
         try:
@@ -61,6 +63,15 @@ def callback(image,depth,pcd):
 
         #最小二乘法计算orb点云和ai深度的比例 并缩放ai深度图
         pcd = ros_numpy.numpify(pcd)#pointcloud2 msg -> numpy arry
+        
+        # if scale == 0:
+        #     scale = depth_calibra.depth_calibration(depth,pcd)
+        # else:
+        #     pass
+        # filter = np.percentile(depth,66)
+        # depth[depth>filter]=0
+        # depth = 10*scale*depth
+
         scale = depth_calibra.depth_calibration(depth,pcd)
         depth = scale * depth
 
