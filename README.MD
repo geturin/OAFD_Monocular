@@ -111,5 +111,22 @@ cd ../
 catkin_make
 ```
 # How to use
-will be released after it has been organized
+
+- Connect to tello's wifi
+
+- run ORB_SLAM3 & Midas & ego planner
+```
+roslaunch oafd slam.launch
+roslaunch midas_cpp midas_cpp.launch model_name:="model-small-traced.pt" input_topic:="/camera/image_raw" output_topic:="/camera/depth" out_orig_size:="true"
+
+```
+- when ORB_SLAM3 get ready 
+```
+roslaunch oafd tello.launch
+```
+- When tello finish taking off
+
+```
+rosrun oafd planner_ctrl.py
+```
 
