@@ -25,7 +25,7 @@ class tello_ros:
         self._tof_rate = rospy.Rate(rospy.get_param("~tof_rate", 4))
         self.tof_pub = rospy.Publisher("/tof",Float32,queue_size=1)
         self.bridge = CvBridge()
-        self.take_off = rospy.get_param("take_off", False)
+        self.take_off = rospy.get_param("take_off", True)
         self.command = "rc 0 0 0 0"
 
         #cam_pub
