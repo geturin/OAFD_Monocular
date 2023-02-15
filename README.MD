@@ -61,7 +61,7 @@ catkin build
 sudo apt install ros-[DISTRO]-hector-trajectory-server
 ```
 
-## [MiDAS](https://github.com/isl-org/MiDaS/tree/master/ros)
+## [MiDAS](https://github.com/geturin/MiDaS/tree/master/ros)
 use the MiDAS as monocular depth estimation model
 * create symlink for OpenCV:
 
@@ -76,7 +76,7 @@ source ~/.bashrc
 cd ~/
 mkdir catkin_ws
 cd catkin_ws
-git clone https://github.com/isl-org/MiDaS
+git clone https://github.com/geturin/MiDaS
 mkdir src
 cp -r MiDaS/ros/* src
 
