@@ -118,7 +118,7 @@ catkin_make
 ```
 roslaunch oafd slam.launch
 roslaunch midas_cpp midas_cpp.launch model_name:="model-small-traced.pt" input_topic:="/camera/image_raw" output_topic:="/camera/depth" out_orig_size:="true"
-
+roslaunch ego_tello.launch
 ```
 - when ORB_SLAM3 get ready 
 ```
