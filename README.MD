@@ -12,7 +12,7 @@ https://user-images.githubusercontent.com/87827677/209362745-71a07fed-f7f8-49f1-
 Tested on Ubuntu 20.04 & 18.04
 
 ## [ORB_SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
-Use the ORB_SLAM3 as VSLAM(monocular)
+Use the ORB_SLAM3(**v0.4beta**)as VSLAM(monocular)
 - Install the [prerequisites](https://github.com/UZ-SLAMLab/ORB_SLAM3#2-prerequisites).
 - Clone ORB-SLAM3:
 ```
@@ -24,17 +24,20 @@ https://github.com/thien94/ORB_SLAM3).
 - Build:
 ```
 cd ORB_SLAM3
+
+git reset --hard a80b4677009e673b9939a7e91e6ea7bcb5090294
+
 chmod +x build.sh
 ./build.sh
 ```
 - Make sure that **`libORB_SLAM3.so`** is created in the *ORB_SLAM3/lib* folder. If not, check the issue list from the [original repo](https://github.com/UZ-SLAMLab/ORB_SLAM3/issues) and retry.
 
-### [orb_slam3_ros_wrapper](https://github.com/thien94/orb_slam3_ros_wrapper)
+### [orb_slam3_ros_wrapper](https://github.com/geturin/orb_slam3_ros_wrapper)
 
 - Clone the package. Note that it should be a `catkin build` workspace.
 ```
 cd ~/catkin_build/src/
-git clone https://github.com/thien94/orb_slam3_ros_wrapper.git
+git clone https://github.com/geturin/orb_slam3_ros_wrapper.git
 ```
 
 - Open `CMakeLists.txt` and change the directory that leads to ORB-SLAM3 library at the beginning of the file (default is home folder `~/`)
