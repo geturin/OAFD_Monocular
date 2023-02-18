@@ -28,6 +28,7 @@ tf2_ros.TransformListener(tf_buffer)
 rate = rospy.Rate(20)
 
 alpha = 0
+wait_point = 0
 # world frame origin
 origin = PoseStamped()
 origin.pose.position.x = 0
