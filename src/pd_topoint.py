@@ -29,6 +29,7 @@ rate = rospy.Rate(20)
 
 alpha = 0
 wait_point = 0
+map_pose = PoseWithCovarianceStamped()
 # world frame origin
 origin = PoseStamped()
 origin.pose.position.x = 0
