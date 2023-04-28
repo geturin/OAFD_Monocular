@@ -54,7 +54,7 @@ def callback(data):
         pointnumber = len(data.points)
         if pointnumber <= 11:
             # waypoint_limt <= 9
-            star = pointnumber
+            star = pointnumber - 1
         else:
             # waypoint_limt = 2
             star = 0
